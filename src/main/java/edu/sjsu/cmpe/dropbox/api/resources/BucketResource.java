@@ -107,5 +107,50 @@ public class BucketResource {
 		return null;
     	
     }
+    @PUT
+    @Timed(name = "Upload-file")
+    
+       public Response uploadFile() {
+    	
+    	System.out.println("in put");
+    	AmazonS3 s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
+    	System.out.println("put Credentials");
+    	Region usWest1 = Region.getRegion(Regions.US_WEST_1);
+//    	s3Client.setRegion(usWest1);
+    	System.out.println("put Client");
+    	s3Client.setEndpoint("http://s3-us-west-1.amazonaws.com");
+    	System.out.println("put Regions");
+    	String bucketName = "cmpe273project";
+        System.out.println();
+        String key = "File4";
+        try {
+			s3Client.putObject(new PutObjectRequest(bucketName, key, createSampleFile()));
+		} catch (AmazonServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AmazonClientException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    
+		return null;
+    	
+    }
+    
+    private static File createSampleFile() throws IOException {
+        File file = File.createTempFile("aws-java-sdk-", ".txt");
+        //file.deleteOnExit();
+        
+        Writer writer = new OutputStreamWriter(new FileOutputStream(file));
+        writer.write("This is a New File\n");
+        writer.write("Upload Success\n");
+        writer.close();
+
+        return file;
+    }
 }
 
