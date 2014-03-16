@@ -49,6 +49,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import edu.sjsu.cmpe.dropbox.config.dropboxServiceConfiguration;
+import edu.sjsu.cmpe.dropbox.domain.NewFile;
 
 //import javax.ws.rs.core.Response.ResponseBuilder;
 //import javax.ws.rs.core.Request;
@@ -107,10 +108,12 @@ public class BucketResource {
 		return null;
     	
     }
+
+    
     @PUT
     @Timed(name = "Upload-file")
     
-       public Response uploadFile() {
+       public Response uploadFile(NewFile request) {
     	
     	System.out.println("in put");
     	AmazonS3 s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
@@ -122,7 +125,7 @@ public class BucketResource {
     	System.out.println("put Regions");
     	String bucketName = "cmpe273project";
         System.out.println();
-        String key = "File4";
+        String key = NewFile.getName();
         try {
 			s3Client.putObject(new PutObjectRequest(bucketName, key, createSampleFile()));
 		} catch (AmazonServiceException e) {
@@ -152,5 +155,7 @@ public class BucketResource {
 
         return file;
     }
+
+    
 }
 
