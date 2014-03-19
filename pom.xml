@@ -100,7 +100,7 @@
 									implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>edu.sjsu.cmpe.Dropbox.DropboxService</mainClass>
+									<mainClass>edu.sjsu.cmpe.dropbox.dropboxService</mainClass>
 								</transformer>
 							</transformers>
 						</configuration>
