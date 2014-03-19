@@ -24,10 +24,13 @@ public class RootResource {
     @GET
     @Timed(name = "get-root")
     public Response getRoot() {
-	//LinksDto links = new LinksDto();
+	LinksDto links = new LinksDto();
+	links.addLink(new LinkDto("view-file", "/files", "GET"));
+
+	
 	System.out.print("You are in Root");
 
-	return Response.status(200).build();
+	return Response.ok(links).build();
     }
 }
 

@@ -27,8 +27,8 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
-import com.amazonaws.regions.Regions;
-import com.amazonaws.regions.Region;
+//import com.amazonaws.regions.Regions;
+//import com.amazonaws.regions.Region;
 import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
 
 
@@ -71,7 +71,7 @@ import java.util.ArrayList;
 
 
 
-@Path("/v1/bucket")
+@Path("/v1/files")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class BucketResource {
@@ -86,14 +86,14 @@ public class BucketResource {
     	//AmazonS3 s3Client = new AmazonS3Client(credentials);
     	
     	AmazonS3 s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
-    	System.out.println("Credentials");
-    	Region usWest1 = Region.getRegion(Regions.US_WEST_1);
+  //  	System.out.println("Credentials");
+//    	Region usWest1 = Region.getRegion(Regions.US_WEST_1);
 //    	s3Client.setRegion(usWest1);
-    	System.out.println("Client");
+   // 	System.out.println("Client");
     	s3Client.setEndpoint("http://s3-us-west-1.amazonaws.com");
-    	System.out.println("Regions");
+    //	System.out.println("Regions");
     	String bucketName = "cmpe273project";
-    	System.out.println("Listing objects");
+   // 	System.out.println("Listing objects");
         ObjectListing objectListing = s3Client.listObjects(new ListObjectsRequest()
                 .withBucketName(bucketName));
                
@@ -109,22 +109,56 @@ public class BucketResource {
     	
     }
 
-    
     @PUT
+    @Timed(name = "add-file")
+       public Response addFile(NewFile request) {
+    	AmazonS3 s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
+      	s3Client.setEndpoint("http://s3-us-west-1.amazonaws.com");
+      	String bucketName = "cmpe273project";
+
+      	String key = NewFile.getName();
+      	File file = new File("D:\\SP14\\CMPE 273\\" + key);
+      	if(file.exists())
+      	{
+      		System.out.println("Yeayyyy file exists");
+      		try {
+    			s3Client.putObject(new PutObjectRequest(bucketName, key, file));
+    		} catch (AmazonServiceException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		} catch (AmazonClientException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		} 
+      	}
+      	else
+      	{
+      		System.out.println("Noooo invalid file name");
+      	}
+        
+    	
+        System.out.println();
+		return null;
+    	
+   	
+    }
+
+    
+  /*  @PUT
     @Timed(name = "Upload-file")
     
        public Response uploadFile(NewFile request) {
     	
-    	System.out.println("in put");
+   // 	System.out.println("in put");
     	AmazonS3 s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
-    	System.out.println("put Credentials");
-    	Region usWest1 = Region.getRegion(Regions.US_WEST_1);
+  //  	System.out.println("put Credentials");
+ //   	Region usWest1 = Region.getRegion(Regions.US_WEST_1);
 //    	s3Client.setRegion(usWest1);
-    	System.out.println("put Client");
+   // 	System.out.println("put Client");
     	s3Client.setEndpoint("http://s3-us-west-1.amazonaws.com");
-    	System.out.println("put Regions");
+   // 	System.out.println("put Regions");
     	String bucketName = "cmpe273project";
-        System.out.println();
+    //    System.out.println();
         String key = NewFile.getName();
         try {
 			s3Client.putObject(new PutObjectRequest(bucketName, key, createSampleFile()));
@@ -155,7 +189,7 @@ public class BucketResource {
 
         return file;
     }
-
+*/
     
 }
 
