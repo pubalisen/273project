@@ -26,6 +26,7 @@ public class RootResource {
     public Response getRoot() {
 	LinksDto links = new LinksDto();
 	links.addLink(new LinkDto("view-file", "/files", "GET"));
+	links.addLink(new LinkDto("add-file", "/files", "POST"));
 
 	
 	System.out.print("You are in Root");

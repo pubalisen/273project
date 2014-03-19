@@ -12,6 +12,7 @@ import java.util.UUID;
 
 
 
+
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
@@ -30,6 +31,7 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 //import com.amazonaws.regions.Regions;
 //import com.amazonaws.regions.Region;
 import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
+
 
 
 import javax.validation.Valid;
@@ -60,9 +62,11 @@ import edu.sjsu.cmpe.dropbox.domain.NewFile;
 
 
 
+
 //import com.sun.research.ws.wadl.Request;
 import com.yammer.dropwizard.jersey.params.LongParam;
 import com.yammer.metrics.annotation.Timed;
+
 
 //import edu.sjsu.cmpe.dropbox.domain.BucketDetails;
 import edu.sjsu.cmpe.dropbox.dto.*;
@@ -105,11 +109,11 @@ public class BucketResource {
     	
     	
     	
-		return null;
+        return Response.status(200).entity("All files displayed").build();
     	
     }
 
-    @PUT
+    @POST
     @Timed(name = "add-file")
        public Response addFile(NewFile request) {
     	AmazonS3 s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
@@ -117,12 +121,14 @@ public class BucketResource {
       	String bucketName = "cmpe273project";
 
       	String key = NewFile.getName();
-      	File file = new File("D:\\SP14\\CMPE 273\\" + key);
+      	File file = new File("/host/ubuntu/project273/" + key);
+      	//File file = new File("D:\\SP14\\CMPE 273\\" + key);
       	if(file.exists())
       	{
       		System.out.println("Yeayyyy file exists");
       		try {
     			s3Client.putObject(new PutObjectRequest(bucketName, key, file));
+    			 return Response.status(200).entity("File Added").build();
     		} catch (AmazonServiceException e) {
     			// TODO Auto-generated catch block
     			e.printStackTrace();
@@ -131,19 +137,47 @@ public class BucketResource {
     			e.printStackTrace();
     		} 
       	}
-      	else
-      	{
-      		System.out.println("Noooo invalid file name");
-      	}
-        
+      	
     	
         System.out.println();
-		return null;
+        return Response.status(400).entity("File could not be Added").build();
+       
     	
    	
     }
 
-    
+    @DELETE
+ //   @Path("/v1/files")
+    @Timed(name = "delete-file")
+ //      public Response delFile(@PathParam("filename") String key) {
+    	public Response delFile(NewFile request) {
+    	AmazonS3 s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
+      	s3Client.setEndpoint("http://s3-us-west-1.amazonaws.com");
+      	String bucketName = "cmpe273project";
+
+      	String key = NewFile.getName();
+      	//File file = new File("/host/ubuntu/project273/" + key);
+      	//File file = new File("D:\\SP14\\CMPE 273\\" + key);
+      	
+      		try {
+      			System.out.println("Deleting an object\n");
+      			s3Client.deleteObject(bucketName, key);
+      			return Response.status(200).entity("File Deleted").build();
+    		} catch (AmazonServiceException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		} catch (AmazonClientException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		} 
+      
+        
+    	
+        System.out.println();
+        return Response.status(400).entity("File could not be deleted").build();
+    	
+   	
+    }
   /*  @PUT
     @Timed(name = "Upload-file")
     
