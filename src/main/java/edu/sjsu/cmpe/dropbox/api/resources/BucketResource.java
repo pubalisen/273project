@@ -82,14 +82,14 @@ public class BucketResource {
     @GET
     @Timed(name = "view-file")
        public Response getFile() {
-    	System.out.println("in first");
-    	//String access_key="AKIAJGHI3W5AFQQM2VJQ";
-    	//String secret_key="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";
-		//AWSCredentials credentials = new BasicAWSCredentials(access_key, secret_key);
+    //	System.out.println("in first");
+    	String access_key="AKIAJGHI3W5AFQQM2VJQ";
+    	String secret_key="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";
+		AWSCredentials credentials = new BasicAWSCredentials(access_key, secret_key);
 		
-    	//AmazonS3 s3Client = new AmazonS3Client(credentials);
+    	AmazonS3 s3Client = new AmazonS3Client(credentials);
     	
-    	AmazonS3 s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
+    //	AmazonS3 s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
   //  	System.out.println("Credentials");
 //    	Region usWest1 = Region.getRegion(Regions.US_WEST_1);
 //    	s3Client.setRegion(usWest1);
@@ -116,13 +116,20 @@ public class BucketResource {
     @POST
     @Timed(name = "add-file")
        public Response addFile(NewFile request) {
-    	AmazonS3 s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
+    	String access_key="AKIAJGHI3W5AFQQM2VJQ";
+    	String secret_key="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";
+		AWSCredentials credentials = new BasicAWSCredentials(access_key, secret_key);
+		
+    	AmazonS3 s3Client = new AmazonS3Client(credentials);
+
+   // 	AmazonS3 s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
       	s3Client.setEndpoint("http://s3-us-west-1.amazonaws.com");
       	String bucketName = "cmpe273project";
 
       	String key = NewFile.getName();
-      	File file = new File("/host/ubuntu/project273/" + key);
-      	//File file = new File("D:\\SP14\\CMPE 273\\" + key);
+      	//File file = new File("/host/ubuntu/project273/" + key);
+      	File file = new File("C:\\Users\\Kinnera\\Desktop\\" + key);
+      	System.out.println(key);
       	if(file.exists())
       	{
       		System.out.println("Yeayyyy file exists");
@@ -137,6 +144,8 @@ public class BucketResource {
     			e.printStackTrace();
     		} 
       	}
+      	else
+      		System.out.println("No not found");
       	
     	
         System.out.println();
@@ -151,13 +160,19 @@ public class BucketResource {
     @Timed(name = "delete-file")
  //      public Response delFile(@PathParam("filename") String key) {
     	public Response delFile(NewFile request) {
-    	AmazonS3 s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
+    //	AmazonS3 s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
+    	String access_key="AKIAJGHI3W5AFQQM2VJQ";
+    	String secret_key="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";
+		AWSCredentials credentials = new BasicAWSCredentials(access_key, secret_key);
+		
+    	AmazonS3 s3Client = new AmazonS3Client(credentials);
+
       	s3Client.setEndpoint("http://s3-us-west-1.amazonaws.com");
       	String bucketName = "cmpe273project";
 
       	String key = NewFile.getName();
       	//File file = new File("/host/ubuntu/project273/" + key);
-      	//File file = new File("D:\\SP14\\CMPE 273\\" + key);
+      	File file = new File("C:\\Users\\Kinnera\\Desktop\\" + key);
       	
       		try {
       			System.out.println("Deleting an object\n");
