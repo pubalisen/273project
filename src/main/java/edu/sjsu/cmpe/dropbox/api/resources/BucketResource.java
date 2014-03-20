@@ -198,7 +198,7 @@ public class BucketResource {
     
        public Response uploadFile(NewFile request) {
     	
-   // 	System.out.println("in put");
+  
     	AmazonS3 s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
   //  	System.out.println("put Credentials");
  //   	Region usWest1 = Region.getRegion(Regions.US_WEST_1);
