@@ -82,9 +82,9 @@ public class BucketResource {
     @GET
     @Timed(name = "view-file")
        public Response getFile() {
-    //	System.out.println("in first");
-    	String access_key="AKIAJGHI3W5AFQQM2VJQ";
-    	String secret_key="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";
+    //	Put the access_key and secret_key
+    	String access_key="";
+    	String secret_key="";
 		AWSCredentials credentials = new BasicAWSCredentials(access_key, secret_key);
 		
     	AmazonS3 s3Client = new AmazonS3Client(credentials);
@@ -116,8 +116,8 @@ public class BucketResource {
     @POST
     @Timed(name = "add-file")
        public Response addFile(NewFile request) {
-    	String access_key="AKIAJGHI3W5AFQQM2VJQ";
-    	String secret_key="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";
+    	String access_key="";
+    	String secret_key="";
 		AWSCredentials credentials = new BasicAWSCredentials(access_key, secret_key);
 		
     	AmazonS3 s3Client = new AmazonS3Client(credentials);
@@ -128,7 +128,7 @@ public class BucketResource {
 
       	String key = NewFile.getName();
       	//File file = new File("/host/ubuntu/project273/" + key);
-      	File file = new File("C:\\Users\\Kinnera\\Desktop\\" + key);
+      	File file = new File("C:\\Users\\Pooja SJSU\\Desktop\\" + key);
       	System.out.println(key);
       	if(file.exists())
       	{
@@ -161,8 +161,8 @@ public class BucketResource {
  //      public Response delFile(@PathParam("filename") String key) {
     	public Response delFile(NewFile request) {
     //	AmazonS3 s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
-    	String access_key="AKIAJGHI3W5AFQQM2VJQ";
-    	String secret_key="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";
+    	String access_key="";
+    	String secret_key="";
 		AWSCredentials credentials = new BasicAWSCredentials(access_key, secret_key);
 		
     	AmazonS3 s3Client = new AmazonS3Client(credentials);
