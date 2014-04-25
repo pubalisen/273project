@@ -4,13 +4,7 @@ http:
   # Root Path http://{host}:{port}/xxx
   rootPath: /dropbox/*
 
-  # The port on which the HTTP server listens for service requests.
-  port: 8050
-
-  # The port on which the HTTP server listens for administrative requests.
-  adminPort: 8082
-
-  # Logging settings.
+    # Logging settings.
 logging:
 
   # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
@@ -53,3 +47,28 @@ logging:
 
     # The timezone used to format dates. HINT: USE THE DEFAULT, UTC.
     timeZone: UTC
+
+# HTTP-specific options.
+
+#These are details of amazon
+amazonTimeZone: "https://s3.us-west-1.amazonaws.com/"
+amazonUsername: "AKIAJGHI3W5AFQQM2VJQ"
+amazonPassword: "yQ2HoE7+gdwrQBaOylN0wiQaEV4q4AUmGxRYJAO4"
+dbName: "dropbox"
+dbCollection: "dropboxdetails"
+databaseUsername: "cmpe273"
+databasePassword: "123456"
+databaseAddress: "ds053658.mongolab.com"
+databasePort: 53658
+
+# HTTP-specific options.
+http:
+  # Root Path http://{host}:{port}/xxx
+  rootPath: /dropbox/*
+
+# The port on which the HTTP server listens for service requests.
+  port: 8050
+
+  # The port on which the HTTP server listens for administrative requests.
+  adminPort: 8082
+

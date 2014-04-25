@@ -21,17 +21,17 @@ import edu.sjsu.cmpe.dropbox.config.MongoConfig;
 /**
  * @author Team Projections This class contains methods which will have common
  *         amazon functions which we need for every operation that we will
- *         perform on amazon glacier.
+ *         perform on amazon S3.
  * 
  */
 public class AmazonCredentials {
 	/**
 	 * @param credentials
-	 * @return AmazonGlacierClient
+	 * @return AmazonS3Client
 	 */
 	public AmazonS3Client getClient(AWSCredentials credentials) {
 		AmazonS3Client client = new AmazonS3Client(credentials);
-		client.setEndpoint(MongoConfig.getAmazonTimeZone());
+		client.setEndpoint("http://s3-us-west-1.amazonaws.com");
 		return client;
 	}
 

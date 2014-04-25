@@ -19,9 +19,9 @@ public class MongoConfig {
 	
     private static String dbCollection="dropboxdetails";
     
-    private static String databaseUsername="pawans55";
+    private static String databaseUsername="cmpe273";
     
-    private static String databasePassword="_technical55";
+    private static String databasePassword="12356";
 
 	private static String databaseAddress="ds053658.mongolab.com";
 

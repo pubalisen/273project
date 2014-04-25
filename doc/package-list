@@ -1,0 +1,10 @@
+de.spinscale.dropwizard.jobs
+de.spinscale.dropwizard.jobs.annotations
+de.spinscale.dropwizard.jobs.parser
+edu.sjsu.cmpe.dropbox
+edu.sjsu.cmpe.dropbox.api.resources
+edu.sjsu.cmpe.dropbox.config
+edu.sjsu.cmpe.dropbox.domain
+edu.sjsu.cmpe.dropbox.dto
+edu.sjsu.cmpe.dropbox.ui.resources
+edu.sjsu.cmpe.dropbox.ui.views

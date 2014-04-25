@@ -53,22 +53,11 @@ public class MongoDBDetails {
 	private List<String> sharedbucketNames = new ArrayList<String>();
 
 	private List<String> sharedFileNames = new ArrayList<String>();
-
-	private List<String> sharedArchiveIDs = new ArrayList<String>();
-
 	private List<Long> sharedFileSizes = new ArrayList<Long>();
 
 	private List<String> sharedFileDates = new ArrayList<String>();
 
 	private List<String> trashListOfFiles = new ArrayList<String>();
-
-	private List<String> trashbucketNames = new ArrayList<String>();
-
-	private List<Long> trashFileSizes = new ArrayList<Long>();
-
-	private List<String> trashListOfDates = new ArrayList<String>();
-
-	private List<String> trashCameFrom = new ArrayList<String>();
 
 	/**
 	 * @return the userId
@@ -287,17 +276,7 @@ public class MongoDBDetails {
 	/**
 	 * @return the sharedArchiveIDs
 	 */
-	public List<String> getSharedArchiveIDs() {
-		return sharedArchiveIDs;
-	}
-
-	/**
-	 * @param sharedArchiveIDs
-	 *            the sharedArchiveIDs to set
-	 */
-	public void setSharedArchiveIDs(List<String> sharedArchiveIDs) {
-		this.sharedArchiveIDs = sharedArchiveIDs;
-	}
+	
 
 	public void addSharedbucketName(int index, String bucketName) {
 		sharedbucketNames.add(index, bucketName);
@@ -307,21 +286,13 @@ public class MongoDBDetails {
 		sharedFileNames.add(fileName);
 	}
 
-	public void addSharedArchiveId(int index, String ArchiveId) {
-		sharedArchiveIDs.add(index, ArchiveId);
-	}
+
 
 	public String getSharedFilebucketName(int index) {
 		return sharedbucketNames.get(index);
 	}
 
-	public String getSharedFileArchivalId(int index) {
-		return sharedArchiveIDs.get(index);
-	}
 
-	public long getSharedFileSize(int index) {
-		return sharedFileSizes.get(index);
-	}
 
 	/**
 	 * @return the sharedFileSizes
@@ -352,120 +323,14 @@ public class MongoDBDetails {
 	}
 
 	public void removeSharedFileDetails(int index) {
-		sharedArchiveIDs.remove(index);
+		
 		sharedFileNames.remove(index);
 		sharedFileSizes.remove(index);
 		sharedbucketNames.remove(index);
 		sharedFileDates.remove(index);
 	}
 
-	/**
-	 * @return the trashListOfFiles
-	 */
-	public List<String> getTrashListOfFiles() {
-		return trashListOfFiles;
-	}
-
-	/**
-	 * @param trashListOfFiles
-	 *            the trashListOfFiles to set
-	 */
-	public void setTrashListOfFiles(List<String> trashListOfFiles) {
-		this.trashListOfFiles = trashListOfFiles;
-	}
-
-	/**
-	 * @return the trashFileSizes
-	 */
-	public List<Long> getTrashFileSizes() {
-		return trashFileSizes;
-	}
-
-	/**
-	 * @param trashFileSizes
-	 *            the trashFileSizes to set
-	 */
-	public void setTrashFileSizes(List<Long> trashFileSizes) {
-		this.trashFileSizes = trashFileSizes;
-	}
-
-	/**
-	 * @return the trashListOfDates
-	 */
-	public List<String> getTrashListOfDates() {
-		return trashListOfDates;
-	}
-
-	/**
-	 * @param trashListOfDates
-	 *            the trashListOfDates to set
-	 */
-	public void setTrashListOfDates(List<String> trashListOfDates) {
-		this.trashListOfDates = trashListOfDates;
-	}
-
-	public void addTrashListOfFiles(String fileName) {
-		trashListOfFiles.add(fileName);
-	}
-
-	public void addTrashFileSizes(int index, long fileSize) {
-		trashFileSizes.add(index, fileSize);
-	}
-
-	public String getTrashFilebucketName(int index) {
-		return trashbucketNames.get(index);
-	}
-
-	public int getTrashFileIndex(String fileName) {
-		return trashListOfFiles.indexOf(fileName);
-	}
-
-	public String getTrashCameFrom(int index) {
-		return trashCameFrom.get(index);
-	}
-
-	public void addTrashbucketName(int index, String bucketName) {
-		trashbucketNames.add(index, bucketName);
-	}
-
-	public void addTrashFileDeletionDate(int index, String date) {
-		trashListOfDates.add(index, date);
-	}
-
-	public void addTrashCameFrom(int index, String status) {
-		trashCameFrom.add(index, status);
-	}
-
-	/**
-	 * @return the trashbucketNames
-	 */
-	public List<String> getTrashbucketNames() {
-		return trashbucketNames;
-	}
-
-	/**
-	 * @param trashbucketNames
-	 *            the trashbucketNames to set
-	 */
-	public void setTrashbucketNames(List<String> trashbucketNames) {
-		this.trashbucketNames = trashbucketNames;
-	}
-
-	/**
-	 * @return the trashCameFrom
-	 */
-	public List<String> getTrashCameFrom() {
-		return trashCameFrom;
-	}
-
-	/**
-	 * @param trashCameFrom
-	 *            the trashCameFrom to set
-	 */
-	public void setTrashCameFrom(List<String> trashCameFrom) {
-		this.trashCameFrom = trashCameFrom;
-	}
-
+	
 	/**
 	 * @return the sharedFileDates
 	 */
@@ -555,15 +420,5 @@ public class MongoDBDetails {
 		return sharedFileNames.indexOf(fileName);
 	}
 
-	public void removeFromTrash(int index) {
-		trashCameFrom.remove(index);
-		trashFileSizes.remove(index);
-		trashListOfDates.remove(index);
-		trashListOfFiles.remove(index);
-		trashbucketNames.remove(index);
-	}
-
-	public long getTrashFileSize(int index){
-		return trashFileSizes.get(index);
-	}
+	
 }

@@ -2,13 +2,20 @@ package edu.sjsu.cmpe.dropbox.api.resources;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.UUID;
+
+
+
 
 
 
@@ -34,6 +41,9 @@ import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
 
 
 
+
+
+
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -51,6 +61,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import edu.sjsu.cmpe.dropbox.config.dropboxServiceConfiguration;
+import edu.sjsu.cmpe.dropbox.domain.AmazonCredentials;
 import edu.sjsu.cmpe.dropbox.domain.NewFile;
 
 //import javax.ws.rs.core.Response.ResponseBuilder;
@@ -63,9 +74,15 @@ import edu.sjsu.cmpe.dropbox.domain.NewFile;
 
 
 
+
+
+
 //import com.sun.research.ws.wadl.Request;
 import com.yammer.dropwizard.jersey.params.LongParam;
 import com.yammer.metrics.annotation.Timed;
+
+
+
 
 
 //import edu.sjsu.cmpe.dropbox.domain.BucketDetails;
@@ -73,68 +90,57 @@ import edu.sjsu.cmpe.dropbox.dto.*;
 
 import java.util.ArrayList;
 
-
-
-@Path("/v1/files")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
-public class BucketResource {
-    @GET
-    @Timed(name = "view-file")
-       public Response getFile() {
-    //	Put the access_key and secret_key
-    	String access_key="";
-    	String secret_key="";
-		AWSCredentials credentials = new BasicAWSCredentials(access_key, secret_key);
-		
-    	AmazonS3 s3Client = new AmazonS3Client(credentials);
-    	
-    //	AmazonS3 s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
-  //  	System.out.println("Credentials");
-//    	Region usWest1 = Region.getRegion(Regions.US_WEST_1);
-//    	s3Client.setRegion(usWest1);
-   // 	System.out.println("Client");
-    	s3Client.setEndpoint("http://s3-us-west-1.amazonaws.com");
-    //	System.out.println("Regions");
-    	String bucketName = "cmpe273project";
-   // 	System.out.println("Listing objects");
-        ObjectListing objectListing = s3Client.listObjects(new ListObjectsRequest()
-                .withBucketName(bucketName));
-               
-        for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries()) {
-            System.out.println(" - " + objectSummary.getKey() + "  " +
-                               "(size = " + objectSummary.getSize() + ")");
-        }
-        System.out.println();
-    	
-    	
-    	
-        return Response.status(200).entity("All files displayed").build();
-    	
-    }
+   
+    private String getFileNameFromPath(String filePath) {
+		// TODO Auto-generated method stub
+		String fileName=null;
+		String newstr=filePath;
+		System.out.println(filePath);
+		String[] str=newstr.split("\\\\");
+		for (String string : str) {
+			fileName=string;
+		//	System.out.println(string);
+		}
+		System.out.println("update for "+fileName);
+		//compute the fileName
+		return(fileName);
+	}
+    
+    private long getFileSize(String filePath) {
+		// TODO Auto-generated method stub
+		File file = new File(filePath);
+		long fileSize = file.length() / 1048786;
+		System.out.println("File size is+"+fileSize);
+		return fileSize;
+	}
 
     @POST
-    @Timed(name = "add-file")
-       public Response addFile(NewFile request) {
-    	String access_key="";
-    	String secret_key="";
-		AWSCredentials credentials = new BasicAWSCredentials(access_key, secret_key);
+    @Path("/old/{existinguser}/upload")
+    @Timed(name = "upload-file")
+       public Response uploadFile(@PathParam("existinguser") String existingUser, @QueryParam("filepath") String filePath) throws IOException{
+    	AmazonCredentials myCredentials = new AmazonCredentials();
+		AWSCredentials credentials = myCredentials.getCredentials();
+    	System.out.println("Inside upload-file");
+    	
 		
     	AmazonS3 s3Client = new AmazonS3Client(credentials);
 
-   // 	AmazonS3 s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
+ 
       	s3Client.setEndpoint("http://s3-us-west-1.amazonaws.com");
-      	String bucketName = "cmpe273project";
-
-      	String key = NewFile.getName();
-      	//File file = new File("/host/ubuntu/project273/" + key);
-      	File file = new File("C:\\Users\\Pooja SJSU\\Desktop\\" + key);
+    //    String bucketName = existingUser;
+      	String bucketName = mongo.getBucketName(existingUser);
+      	String key = getFileNameFromPath(filePath);
+      	
+      	File file = new File("D:\\S3files\\" + key);
+      	long fileSize = getFileSize(filePath);
+      //	File file = new File(filePath);
       	System.out.println(key);
       	if(file.exists())
       	{
-      		System.out.println("Yeayyyy file exists");
+      	System.out.println("Yeayyyy file exists");
       		try {
     			s3Client.putObject(new PutObjectRequest(bucketName, key, file));
+    			mongo.addNewFileDetails(existingUser, key, filePath, fileSize);
     			 return Response.status(200).entity("File Added").build();
     		} catch (AmazonServiceException e) {
     			// TODO Auto-generated catch block
@@ -156,89 +162,45 @@ public class BucketResource {
     }
 
     @DELETE
- //   @Path("/v1/files")
+    @Path("/old/{existinguser}/delete")
     @Timed(name = "delete-file")
  //      public Response delFile(@PathParam("filename") String key) {
-    	public Response delFile(NewFile request) {
+    public Response deleteFile(@PathParam("existinguser") String existingUser, @QueryParam("filename") String fileName){
     //	AmazonS3 s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
-    	String access_key="";
-    	String secret_key="";
-		AWSCredentials credentials = new BasicAWSCredentials(access_key, secret_key);
-		
-    	AmazonS3 s3Client = new AmazonS3Client(credentials);
+   
+    AmazonCredentials myCredentials = new AmazonCredentials();
+AWSCredentials credentials = myCredentials.getCredentials();
+    System.out.println("Inside upload-file");
+   
+    AmazonS3 s3Client = new AmazonS3Client(credentials);
 
-      	s3Client.setEndpoint("http://s3-us-west-1.amazonaws.com");
-      	String bucketName = "cmpe273project";
-
-      	String key = NewFile.getName();
-      	//File file = new File("/host/ubuntu/project273/" + key);
-      	File file = new File("C:\\Users\\Kinnera\\Desktop\\" + key);
-      	
-      		try {
-      			System.out.println("Deleting an object\n");
-      			s3Client.deleteObject(bucketName, key);
-      			return Response.status(200).entity("File Deleted").build();
-    		} catch (AmazonServiceException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
-    		} catch (AmazonClientException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
-    		} 
+ 
+      s3Client.setEndpoint("http://s3-us-west-1.amazonaws.com");
+    //    String bucketName = existingUser;
+      String bucketName = mongo.getBucketName(existingUser);
+      String key = fileName;
+      System.out.println(key);
+     
+      try {
+      System.out.println("Deleting an object\n");
+      s3Client.deleteObject(bucketName, key);
+      mongo.deleteFileDetails(existingUser, fileName);
+      return Response.status(200).entity("File Deleted").build();
+    } catch (AmazonServiceException e) {
+    // TODO Auto-generated catch block
+    e.printStackTrace();
+    } catch (AmazonClientException e) {
+    // TODO Auto-generated catch block
+    e.printStackTrace();
+    } 
       
         
-    	
+   
         System.out.println();
         return Response.status(400).entity("File could not be deleted").build();
-    	
+   
    	
     }
-  /*  @PUT
-    @Timed(name = "Upload-file")
-    
-       public Response uploadFile(NewFile request) {
-    	
-  
-    	AmazonS3 s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
-  //  	System.out.println("put Credentials");
- //   	Region usWest1 = Region.getRegion(Regions.US_WEST_1);
-//    	s3Client.setRegion(usWest1);
-   // 	System.out.println("put Client");
-    	s3Client.setEndpoint("http://s3-us-west-1.amazonaws.com");
-   // 	System.out.println("put Regions");
-    	String bucketName = "cmpe273project";
-    //    System.out.println();
-        String key = NewFile.getName();
-        try {
-			s3Client.putObject(new PutObjectRequest(bucketName, key, createSampleFile()));
-		} catch (AmazonServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (AmazonClientException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
-    
-		return null;
-    	
-    }
-    
-    private static File createSampleFile() throws IOException {
-        File file = File.createTempFile("aws-java-sdk-", ".txt");
-        //file.deleteOnExit();
-        
-        Writer writer = new OutputStreamWriter(new FileOutputStream(file));
-        writer.write("This is a New File\n");
-        writer.write("Upload Success\n");
-        writer.close();
-
-        return file;
-    }
-*/
     
 }
 
