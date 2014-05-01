@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
-	
+    <link rel="shortcut icon" href="./ico/favicon.png">
+
     <title>Jumbotron Template for Bootstrap</title>
 
     <!-- Bootstrap core CSS -->
@@ -31,7 +31,7 @@
   </head>
 
   <body class="custom-background">
-<div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+	<div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -44,13 +44,14 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a id="homeurl" href="/dropbox/home/xyz/listoffiles">Home</a></li>
-            <li><a href="#" id="uploadurl" data-toggle="modal" data-target="#myModal">Upload</a></li>
-            </ul>
-          <ul class="nav navbar-nav navbar-right">
+            <li><a id="homeurl" href="/dropbox/home/xyz/listoffiles">Home</a></li>
+           <li><a href="#" id="uploadurl" data-toggle="modal" data-target="#myModal">Upload</a></li>
+            
+          </ul>
+           <ul class="nav navbar-nav navbar-right">
           	<li><a id="logout" href="/dropbox">Logout</a></li>
           </ul>
-          </div><!-- /.nav-collapse -->
+        </div><!-- /.nav-collapse -->
       </div><!-- /.container -->
     </div><!-- /.navbar -->
 
@@ -58,8 +59,7 @@
 	<br/>
 	<div id="container-data">
 	<div class="container">
-	
-	   
+
       	<div class="row row-offcanvas row-offcanvas-right">
 
         <div class="col-xs-12 col-sm-12">
@@ -71,9 +71,8 @@
             	<tr style="background-color:#428bca;color:#fff;">
             		<th>Name</th>
             		<th>Date</th>
-            		<th>Download</th>
+            		<th>Recover</th>
             		<th>Delete</th>
-            		<th>Share</th>
             	</tr>
             </thead>
             <tbody>
@@ -81,66 +80,45 @@
             	<tr>
             		<td>{{file}}</td>
             		<td>{{date}}</td>
-            		<td><button class="btn btn-success" name="download">Download</button></td>
-            		<td><button class="btn btn-danger" name="delete">Delete</button></td>
-            		</tr>
+            		<td><button class="btn btn-success" name="download">Recover</button></td>
+            		<td><button class="btn btn-danger" name="delete" title="Clicking this permanently deletes your file.">Delete</button></td>
+            	</tr>
             {{/listOfFiles}}
             
             </tbody>
             </table>
          </div>
         </div><!--/span-->
-       </div><!--/row-->
-       <hr>
-		<footer>
-        <p>Maverick &copy; Company 2014</p>
+    
+        </div><!--/row-->
+      
+      <hr>
+
+      <footer>
+        <p>Mavericks &copy; Company 2014</p>
       </footer>
 
     </div><!--/.container-->
 	</div><!--/.container-data-->
-   
-   
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Upload a file</h4>
       </div>
-     
-        <input type="file" name="filepath" id="link" >
-	     
-        <input id="upload"  type="submit" value="Upload" name="upload" >
-        
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
- <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Enter the user you want to share the file with :</h4>
-      </div>
       <div class="modal-body">
-        <input type="text" class="form-control" placeholder="Enter username" name="shareuser" id="shareuser" >
-	 			 
-      </div>
+        <input type="file" name="filepath" id="link" >
+	  </div>
       <div class="modal-footer">
-        <button id="sharefile" class="btn btn-lg btn-primary" type="submit" name="sharefile" > Share </button>
+        <input id="upload" class="btn btn-lg btn-primary" type="submit" value="Upload" name="upload" >
         
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-   
-   
 
-
- 
-   
     <script src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script>
 	 <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -149,103 +127,93 @@
     <script src="../assets/js/bootstrap.min.js"></script>
 	<script src="../assets/js/offcanvas.js"></script>
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+	
 	<!-- -->
 	<script type="text/javascript">
-	var tag;
-		
+			
 		$(":button").click(function() {
 		
 			var button_pressed=$(this).attr("name");//button name
+			var tag = $(this).parent().parent().children(":first-child").text();//filename
 			
-			if(button_pressed != "sharefile")
-			{
-				tag = $(this).parent().parent().children(":first-child").text();//filename
-			}
-		
 			var pathArray=window.location.pathname.split('/');
 			var existinguser=pathArray[3];
 	       
         	if(button_pressed=="delete"){
-        	var uri = "/dropbox/v1/files/old/"+existinguser+"/delete?filename="+tag;
-        	 alert("Your file has been deleted but you can still recover it later!");
-        	$.ajax({
-            	     url: uri,
+        	var uri = "/dropbox/v1/documents/old/"+existinguser+"/trash/delete?fileName="+tag;
+        	       
+       		 $.ajax({
+            	      url: uri,
                 	  type: 'DELETE',
                   	  success: function(data) {
-                         alert("success");
+                      alert("success");
                       },
-						error:function(xhr, statusText){
-							if (xhr.status == 200)
-							{
-								window.location = "/dropbox/home/"+existinguser+"/listoffiles";
-							}
-						}     
+                      error:function(xhr, statusText){
+    						if (xhr.status == 200)
+    						{
+    				 			window.location = "/dropbox/home/"+existinguser+"/deletedfiles";
+    						}
+    					}
                });
               
               }
-              
-             
              
              if(button_pressed=="download"){
-             
-        	var uri = "/dropbox/v1/files/old/"+existinguser+"/download?filepath=D:/"+tag+".zip&fileName="+tag;
-        	 alert("Please be patient! Your file will be downloaded after 4 hours. Thank you!");
+            
+        	var uri = "/dropbox/v1/files/old/"+existinguser+"/trash/recover?filepath=D:/"+tag+".zip&fileName="+tag;
+        	
+        	 alert("Your file has been recovered and is available in the Home Section!");    
        		 $.ajax({
             	      url: uri,
-                	  type: 'GET',
+                	  type: 'POST',
                   	  success: function(data) {
                          alert("success");
                       },
                       error:function(xhr, statusText){
     						if (xhr.status == 200)
     						{
-    				 			window.location = "/dropbox/home/"+existinguser+"/listoffiles";
+    				 			window.location = "/dropbox/home/"+existinguser+"/deletedfiles";
     						}
     					}
                 });
-            
+              
               }
-              
-              if(button_pressed=="sharefile"){
-              
-        
-		
-					var shareuser = document.getElementById('shareuser').value;
-					
-					var pathArray=window.location.pathname.split('/');
-					var existinguser=pathArray[3];
-					
-					var uri = "/dropbox/v1/files/old/"+existinguser+"/share?filename="+tag+"&sharewith="+shareuser;
-        			      alert("You have successfully shared this file");
-       		 $.ajax({
-            	     url: uri,
-                	  type: 'POST',
-                  	  success: function(data) {
-                         window.location = "/dropbox/home/"+existinguser+"/listoffiles";
-                      },
-                      error:function(xhr, statusText){
-                     
-    						if(xhr.status == 200)
-    						{
-    				 			window.location = "/dropbox/home/"+existinguser+"/listoffiles";
-    						}
-    					}
-               });
-             
-              }
-              
-              });
-              </script>
-              <script type="text/javascript">
+		});	
+	
+	</script>
+  	<!-- script for delete-->
+  
+  <!-- -->
+	<script type="text/javascript">
+	
+	$( window ).load(function() {
+	
+  		var pathArray=window.location.pathname.split('/');
+		var existinguser=pathArray[3];
+		var url = "/dropbox/home/"+existinguser+"/deletedfiles"
+		$("#deleteurl").attr("href", url );
+		url = "/dropbox/home/"+existinguser+"/sharedfiles"
+		$("#shareurl").attr("href", url );
+		url = "/dropbox/home/"+existinguser+"/listoffiles"
+		$("#homeurl").attr("href", url );
+	
+	});
+	
+	function deletedfilespage(){
+	var pathArray=window.location.pathname.split('/');
+	var existinguser=pathArray[3];
+	windows.location='/dropbox/home/'+existinguser+'/deletedfiles';
+	return true;
+	}
+	</script>
+	
+	<script type="text/javascript">
 				$( "#upload" ).click(function() {
-				
-					var f = document.getElementById('link').files[0].name;
+					var f = document.getElementById('link').value;
 		
 					var pathArray=window.location.pathname.split('/');
 					var existinguser=pathArray[3];
 					var uri = "/dropbox/v1/files/old/"+existinguser+"/upload?filepath="+f;
-          alert(f);
         	
 			       
        		 $.ajax({
@@ -255,7 +223,7 @@
                          window.location = "/dropbox/home/"+existinguser+"/listoffiles";
                       },
                       error:function(xhr, statusText){
-                    
+                      
     						if(xhr.status == 200)
     						{
     				 			window.location = "/dropbox/home/"+existinguser+"/listoffiles";
@@ -267,48 +235,6 @@
 	
 	
 	</script>
-
-  
-  <script type="text/javascript">
 	
-	$( window ).load(function() {
-	
-  		var pathArray=window.location.pathname.split('/');
-	var existinguser=pathArray[3];
-	var url = "/dropbox/home/"+existinguser+"/deletedfiles"
-	$("#deleteurl").attr("href", url );
-	
-	var pathArray=window.location.pathname.split('/');
-	var existinguser=pathArray[3];
-	var url = "/dropbox/home/"+existinguser+"/sharedfiles"
-	$("#shareurl").attr("href", url );
-	
-	var pathArray=window.location.pathname.split('/');
-	var existinguser=pathArray[3];
-	var url = "/dropbox/home/"+existinguser+"/listoffiles"
-	$("#homeurl").attr("href", url );
-	
-});
-</script>
-
-	<script type="text/javascript">
-
-	
-	function deletedfilespage(){
-	var pathArray=window.location.pathname.split('/');
-	var existinguser=pathArray[3];
-	windows.location='/dropbox/home/'+existinguser+'/deletedfiles';
-	return true;
-	}
-	</script>
-	<script type="text/javascript">
-	function sharedfilespage(){
-	var pathArray=window.location.pathname.split('/');
-	var existinguser=pathArray[3];
-	windows.location='/dropbox/home/'+existinguser+'/sharedfiles';
-	return true;
-	}
-	</script>
-  
   </body>
 </html>
