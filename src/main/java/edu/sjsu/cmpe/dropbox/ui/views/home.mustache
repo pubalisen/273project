@@ -73,7 +73,6 @@
             		<th>Date</th>
             		<th>Download</th>
             		<th>Delete</th>
-            		<th>Share</th>
             	</tr>
             </thead>
             <tbody>
@@ -107,10 +106,11 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Upload a file</h4>
       </div>
-     
+      <div class="modal-body">
         <input type="file" name="filepath" id="link" >
-	     
-        <input id="upload"  type="submit" value="Upload" name="upload" >
+	  </div>
+      <div class="modal-footer">
+        <input id="upload" class="btn btn-lg btn-primary" type="submit" value="Upload" name="upload" >
         
       </div>
     </div><!-- /.modal-content -->
@@ -146,8 +146,8 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="../assets/js/bootstrap.min.js"></script>
-	<script src="../assets/js/offcanvas.js"></script>
+    <script src="./assets/js/bootstrap.min.js"></script>
+	<script src="./assets/js/offcanvas.js"></script>
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 	<!-- -->
@@ -168,7 +168,7 @@
 	       
         	if(button_pressed=="delete"){
         	var uri = "/dropbox/v1/files/old/"+existinguser+"/delete?filename="+tag;
-        	 alert("Your file has been deleted but you can still recover it later!");
+        	 alert("Your file has been deleted!");
         	$.ajax({
             	     url: uri,
                 	  type: 'DELETE',
@@ -189,8 +189,8 @@
              
              if(button_pressed=="download"){
              
-        	var uri = "/dropbox/v1/files/old/"+existinguser+"/download?filepath=D:/"+tag+".zip&fileName="+tag;
-        	 alert("Please be patient! Your file will be downloaded after 4 hours. Thank you!");
+        	var uri = "/dropbox/v1/files/old/"+existinguser+"/download?filepath=D:/Downloadfiles/"+tag+"&fileName="+tag;
+        	 alert("File Download In Progress!");
        		 $.ajax({
             	      url: uri,
                 	  type: 'GET',
@@ -239,14 +239,12 @@
               </script>
               <script type="text/javascript">
 				$( "#upload" ).click(function() {
-				
-					var f = document.getElementById('link').files[0].name;
+					var f = document.getElementById('link').value;
 		
 					var pathArray=window.location.pathname.split('/');
 					var existinguser=pathArray[3];
 					var uri = "/dropbox/v1/files/old/"+existinguser+"/upload?filepath="+f;
-          alert(f);
-        	
+              	
 			       
        		 $.ajax({
             	     url: uri,
