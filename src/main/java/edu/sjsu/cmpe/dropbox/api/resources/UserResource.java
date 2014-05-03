@@ -97,9 +97,9 @@ public class UserResource {
 			sentEmail(credentials,newUserName, newUserPassword,newUserEmailID);
 			return Response.status(200).entity(responseMessage).build();
 		} else {
-			String responseMessage = "Your username will be : " + newUserName;
+			String responceMessage = "Your username will be : " + newUserName;
 			sentEmail(credentials,newUserName, newUserPassword, newUserEmailID);
-			return Response.status(200).entity(responseMessage).build();
+			return Response.status(200).entity(responceMessage).build();
 		}
 
 	}

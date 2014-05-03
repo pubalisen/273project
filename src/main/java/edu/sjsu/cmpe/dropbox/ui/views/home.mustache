@@ -46,6 +46,7 @@
           <ul class="nav navbar-nav">
             <li class="active"><a id="homeurl" href="/dropbox/home/xyz/listoffiles">Home</a></li>
             <li><a href="#" id="uploadurl" data-toggle="modal" data-target="#myModal">Upload</a></li>
+            <li><a id="shareurl" href="/dropbox/home/xyz/sharefiles">Shared Files</a></li>
             </ul>
           <ul class="nav navbar-nav navbar-right">
           	<li><a id="logout" href="/dropbox">Logout</a></li>
@@ -73,6 +74,7 @@
             		<th>Date</th>
             		<th>Download</th>
             		<th>Delete</th>
+            		<th>Share</th>
             	</tr>
             </thead>
             <tbody>
@@ -82,6 +84,7 @@
             		<td>{{date}}</td>
             		<td><button class="btn btn-success" name="download">Download</button></td>
             		<td><button class="btn btn-danger" name="delete">Delete</button></td>
+            		<td><button class="btn btn-warning" name="share" data-toggle="modal" data-target="#myModal1">Share</button></td> 
             		</tr>
             {{/listOfFiles}}
             
@@ -168,18 +171,24 @@
 	       
         	if(button_pressed=="delete"){
         	var uri = "/dropbox/v1/files/old/"+existinguser+"/delete?filename="+tag;
-        	 alert("Your file has been deleted!");
+        	 
         	$.ajax({
             	     url: uri,
                 	  type: 'DELETE',
                   	  success: function(data) {
-                         alert("success");
+                  		alert("Your file has been deleted!");
                       },
 						error:function(xhr, statusText){
 							if (xhr.status == 200)
 							{
+								alert("Your file has been deleted!");
 								window.location = "/dropbox/home/"+existinguser+"/listoffiles";
 							}
+							else
+								{
+								alert("Error deleting");
+    				            window.location.reload();
+								}
 						}     
                });
               
@@ -217,19 +226,27 @@
 					var existinguser=pathArray[3];
 					
 					var uri = "/dropbox/v1/files/old/"+existinguser+"/share?filename="+tag+"&sharewith="+shareuser;
-        			      alert("You have successfully shared this file");
+        			      
        		 $.ajax({
-            	     url: uri,
+            	      url: uri,
                 	  type: 'POST',
                   	  success: function(data) {
-                         window.location = "/dropbox/home/"+existinguser+"/listoffiles";
+                  		alert("You have successfully shared this file");  
+                  	    window.location = "/dropbox/home/"+existinguser+"/listoffiles";
                       },
                       error:function(xhr, statusText){
                      
     						if(xhr.status == 200)
     						{
-    				 			window.location = "/dropbox/home/"+existinguser+"/listoffiles";
+    							alert("You have successfully shared this file");
+    							window.location = "/dropbox/home/"+existinguser+"/listoffiles";
     						}
+    						else
+    							{
+    							alert("Invalid user");
+    				   			document.getElementById('shareuser').value = "";
+    				            window.location.reload();
+    							}
     					}
                });
              

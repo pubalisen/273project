@@ -57,7 +57,7 @@ public class MongoDBDetails {
 
 	private List<String> sharedFileDates = new ArrayList<String>();
 
-	private List<String> trashListOfFiles = new ArrayList<String>();
+	
 
 	/**
 	 * @return the userId

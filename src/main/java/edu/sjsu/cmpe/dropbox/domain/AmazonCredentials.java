@@ -21,7 +21,7 @@ import edu.sjsu.cmpe.dropbox.config.MongoConfig;
 /**
  * @author Team Projections This class contains methods which will have common
  *         amazon functions which we need for every operation that we will
- *         perform on amazon S3.
+ *         perform on amazon glacier.
  * 
  */
 public class AmazonCredentials {
