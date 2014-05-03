@@ -135,11 +135,14 @@ public class MongoTest {
 
 	public void shareFile(String userName, String sharedWith, String fileName) {
 		String query = "{userName:'" + userName + "'}";
+		System.out.println(query);
 		MongoDBDetails userDbDetails = MongoTest.collection.findOne(query).as(
 				MongoDBDetails.class);
 		String query2 = "{userName:'" + sharedWith + "'}";
+		System.out.println(query2);
 		MongoDBDetails sharedDbDetails = MongoTest.collection.findOne(query2)
 				.as(MongoDBDetails.class);
+		System.out.println(sharedDbDetails.toString());
 		sharedDbDetails.addSharedFileName(fileName);
 		int index = sharedDbDetails.getSharedFileIndex(fileName);
 		sharedDbDetails.addSharedbucketName(index, userDbDetails.getbucketName());
@@ -181,30 +184,9 @@ public class MongoTest {
 		if (s.equalsIgnoreCase("N")) {
 			System.out.println("Normal Delete");
 			int index1 = dbDetails.getFileIndex(fileName);
-/*			dbDetails.addTrashListOfFiles(fileName);
-			int index2 = dbDetails.getTrashFileIndex(fileName);
-			dbDetails.addTrashVaultName(index2, dbDetails.getVaultName());
-			dbDetails.addtrashFileArichiveIds(index2,
-					dbDetails.getArchiveId(index1));
-			dbDetails.addTrashFileSizes(index2,
-					dbDetails.getFileSizeFile(index1));
-			dbDetails
-					.addTrashFileDeletionDate(index2, new Date().toGMTString());
-			dbDetails.addTrashCameFrom(index2, s);
 		} else {
 			System.out.println("shared Delete");
 			int index1 = dbDetails.getSharedFileIndex(fileName);
-			dbDetails.addTrashListOfFiles(fileName);
-			int index2 = dbDetails.getTrashFileIndex(fileName);
-			dbDetails.addTrashVaultName(index2,
-					dbDetails.getSharedFileVaultName(index1));
-			dbDetails.addtrashFileArichiveIds(index2,
-					dbDetails.getSharedFileArchivalId(index1));
-			dbDetails.addTrashFileSizes(index2,
-					dbDetails.getSharedFileSize(index1));
-			dbDetails
-					.addTrashFileDeletionDate(index2, new Date().toGMTString());
-			dbDetails.addTrashCameFrom(index2, s);*/
 		}
 		collection.update(query).merge(dbDetails);
 		System.out.println("Moved to trash");
