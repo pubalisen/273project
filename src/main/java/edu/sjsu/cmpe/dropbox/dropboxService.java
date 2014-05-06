@@ -42,12 +42,12 @@ public class dropboxService extends Service<dropboxServiceConfiguration> {
 	/** Add new resources here */
 	
 	MongoConfig.setAmazonTimeZone(configuration.getAmazonTimeZone());
-	MongoConfig.setAmazonUsername("AKIAJGHI3W5AFQQM2VJQ");
-	MongoConfig.setAmazonPassword("yQ2HoE7+gdwrQBaOylN0wiQaEV4q4AUmGxRYJAO4");
-	MongoConfig.setDatabaseAddress("ds053658.mongolab.com");
-	MongoConfig.setDatabasePassword("_technical55");
+	MongoConfig.setAmazonUsername("XXXXXXXXXXXXXX");
+	MongoConfig.setAmazonPassword("XXXXXXXXXXXXXXXXXXXXXXXXx");
+	MongoConfig.setDatabaseAddress("XXXXXXXXXXXXXX");
+	MongoConfig.setDatabasePassword("XXXXXXXXXXXXX");
 	MongoConfig.setDatabasePort(53658);
-	MongoConfig.setDatabaseUsername("pawans55");
+	MongoConfig.setDatabaseUsername("XXXXXXXXXXXX");
 	MongoConfig.setDbCollection("dropboxdetails");
 	MongoConfig.setDbName("dropbox");
 	// Added root resource - kept nothing as of now.
