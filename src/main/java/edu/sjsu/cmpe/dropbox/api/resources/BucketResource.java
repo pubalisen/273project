@@ -89,7 +89,7 @@ import java.util.ArrayList;
 public class BucketResource {
 	private MongoTest mongo;
 	public BucketResource(MongoTest mongo){
-		this.mongo = mongo;
+		this.mongo = mongo;		
 	}
 	
 
@@ -212,29 +212,20 @@ public class BucketResource {
     	System.out.print("\n");
       	
       	String bucketName1 = mongo.getBucketName(existingUser);
-      	System.out.print( mongo.getBucketName(existingUser));
       
-      	
-      	System.out.print("Bucket is in resource.java is" + bucketName1);
       	String Key= null;
       	//String key = getFileNameFromPath(filePath);
 
       	//long fileSize = getFileSize(filePath);
 
       		try {
-    			S3TransferProgress uploader = new S3TransferProgress(Name, s3Client);
-    			//Thread.sleep(1000);
+    			S3TransferProgress uploader = new S3TransferProgress(Name, s3Client, mongo);
     			Key = uploader.getfileName();
     			 Long fileSize = uploader.getfileSize();
+    			
     			 System.out.println("Hellllloooooooooo Key " + Key + "size" + fileSize);
-    			if (Key != null){
-    			mongo.addNewFileDetails(existingUser, Key, "C:\\FakePath", fileSize);
+    			 return Response.status(200).entity("File Added").build();
     			 
-    			return Response.status(200).entity("File Added").build();
-    			}
-    			else{
-    			 return Response.status(200).entity("File Name is NULL").build();
-    			}
     		} catch (AmazonServiceException e) {
     			// TODO Auto-generated catch block
     			e.printStackTrace();

@@ -40,6 +40,8 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
 
+import edu.sjsu.cmpe.dropbox.dto.MongoTest;
+
 /**
  * Demonstrates how to upload data to Amazon S3, and track progress, using a
  * Swing progress bar.
@@ -63,14 +65,18 @@ public class S3TransferProgress {
     private JFrame frame;
     private Upload upload;
     private JButton button;
+	private MongoTest mongo;
     public static long size;
     public static String fileName;
-
-    public S3TransferProgress(String Name, AmazonS3 s3Client) throws Exception {
+    
+    
+    public S3TransferProgress(String Name, AmazonS3 s3Client, MongoTest mongo) {
         frame = new JFrame("Amazon S3 File Upload");
         button = new JButton("Choose File...");
         button.addActionListener(new ButtonListener());
-
+        this.mongo = mongo;
+        System.out.println("Mongo is" + mongo);
+        System.out.println("this.Mongo is" + this.mongo);
         pb = new JProgressBar(0, 100);
         pb.setStringPainted(true);
 
@@ -83,17 +89,19 @@ public class S3TransferProgress {
         bucketName = Name;
         System.out.print("Bucket is" +bucketName);
         System.out.print("Bucket1 is" +Name);
+       
     }
 
-    class ButtonListener implements ActionListener {
-        public void actionPerformed(ActionEvent ae) {
+    
+	class ButtonListener implements ActionListener {    
+   	
+		public void actionPerformed(ActionEvent ae) {
             JFileChooser fileChooser = new JFileChooser();
             int showOpenDialog = fileChooser.showOpenDialog(frame);
             if (showOpenDialog != JFileChooser.APPROVE_OPTION) return;
 
            
-            @SuppressWarnings("deprecation")
-			ProgressListener progressListener = new ProgressListener() {
+            ProgressListener progressListener = new ProgressListener() {
                 public void progressChanged(ProgressEvent progressEvent) {
                     if (upload == null) return;
 
@@ -123,10 +131,13 @@ public class S3TransferProgress {
             
             size = fileToUpload.length()/1024;
             fileName = fileToUpload.getName();
+            System.out.println("Mongo is" + mongo);
+            mongo.addNewFileDetails(bucketName, fileName, "C:\\FakePath", size);
             setSize(size);
             System.out.print(size);
             setfileName(fileName);
             System.out.println(fileName);
+            
 
         }
     }
@@ -153,6 +164,8 @@ public class S3TransferProgress {
     	System.out.println(fileName);
     	return fileName;
     	}
+    
+    
 
 
     private JPanel createContentPane() {
