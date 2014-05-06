@@ -1,5 +1,8 @@
 package edu.sjsu.cmpe.dropbox.api.resources;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,23 +18,6 @@ import java.io.Writer;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.UUID;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
@@ -53,30 +39,24 @@ import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PartETag;
+import com.amazonaws.services.s3.model.ProgressEvent;
+import com.amazonaws.services.s3.model.ProgressListener;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
-
+import com.amazonaws.services.s3.transfer.TransferManager;
+import com.amazonaws.services.s3.transfer.Upload;
 //import com.amazonaws.regions.Regions;
 //import com.amazonaws.regions.Region;
 import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -87,9 +67,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.Produces;
-//import javax.ws.rs.core.CacheControl;
-//import javax.ws.rs.core.Context;
-//import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -97,50 +74,9 @@ import edu.sjsu.cmpe.dropbox.config.dropboxServiceConfiguration;
 import edu.sjsu.cmpe.dropbox.domain.AmazonCredentials;
 import edu.sjsu.cmpe.dropbox.domain.NewFile;
 
-//import javax.ws.rs.core.Response.ResponseBuilder;
-//import javax.ws.rs.core.Request;
-
-//import javax.ws.rs.core.UriInfo;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//import com.sun.research.ws.wadl.Request;
 import com.yammer.dropwizard.jersey.params.LongParam;
 import com.yammer.metrics.annotation.Timed;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//import edu.sjsu.cmpe.dropbox.domain.BucketDetails;
 import edu.sjsu.cmpe.dropbox.dto.*;
 
 import java.util.ArrayList;
@@ -155,6 +91,8 @@ public class BucketResource {
 	public BucketResource(MongoTest mongo){
 		this.mongo = mongo;
 	}
+	
+
     @GET
     @Path("/old/{existinguser}/download")
     @Timed(name = "download-file")
@@ -162,7 +100,8 @@ public class BucketResource {
    			@PathParam("existinguser") String existingUser) throws IOException {
     	AmazonCredentials myCredentials = new AmazonCredentials();
 		AWSCredentials credentials = myCredentials.getCredentials();
-    	System.out.println("Inside upload-file");
+		
+    	System.out.println("Inside Download-file");
     	
 		//test
     	AmazonS3 s3Client = new AmazonS3Client(credentials);
@@ -170,7 +109,7 @@ public class BucketResource {
     	String key = fileName;
       	s3Client.setEndpoint("http://s3-us-west-1.amazonaws.com");
       	String bucketName = mongo.getBucketName(existingUser);
-      	S3Object object = s3Client.getObject(new GetObjectRequest(bucketName, key));
+      	 	S3Object object = s3Client.getObject(new GetObjectRequest(bucketName, key));
         InputStream reader = new BufferedInputStream(object.getObjectContent());
       	File file = new File(filePath);      
       	OutputStream writer = new BufferedOutputStream(new FileOutputStream(file));
@@ -200,7 +139,9 @@ public class BucketResource {
     	
 		//test
     	AmazonS3 s3Client = new AmazonS3Client(credentials);
+    	System.out.println("FILEpATH : "+ filePath);
     	
+    	System.out.println("fileName : "+ fileName);
     	String key = fileName;
     	  System.out.println("key : "+ key);
       	s3Client.setEndpoint("http://s3-us-west-1.amazonaws.com");
@@ -252,31 +193,48 @@ public class BucketResource {
     @POST
     @Path("/old/{existinguser}/upload")
     @Timed(name = "upload-file")
-       public Response uploadFile(@PathParam("existinguser") String existingUser, @QueryParam("filepath") String filePath) throws IOException{
+       public Response uploadFile(@PathParam("existinguser") String existingUser) throws Throwable{
+    	System.out.print("User" +existingUser);
     	AmazonCredentials myCredentials = new AmazonCredentials();
 		AWSCredentials credentials = myCredentials.getCredentials();
     	System.out.println("Inside upload-file");
-    	
-		
+
     	AmazonS3 s3Client = new AmazonS3Client(credentials);
 
  
       	s3Client.setEndpoint("http://s3-us-west-1.amazonaws.com");
-    //    String bucketName = existingUser;
+     
+     
       	String bucketName = mongo.getBucketName(existingUser);
-      	String key = getFileNameFromPath(filePath);
       	
-      	File file = new File("D:\\S3files\\" + key);
-      	long fileSize = getFileSize(filePath);
-      //	File file = new File(filePath);
-      	System.out.println(key);
-      	if(file.exists())
-      	{
-      	System.out.println("Yeayyyy file exists");
+      	String Name = existingUser;
+    	System.out.print("Name is in resource.java is" + Name);
+    	System.out.print("\n");
+      	
+      	String bucketName1 = mongo.getBucketName(existingUser);
+      	System.out.print( mongo.getBucketName(existingUser));
+      
+      	
+      	System.out.print("Bucket is in resource.java is" + bucketName1);
+      	String Key= null;
+      	//String key = getFileNameFromPath(filePath);
+
+      	//long fileSize = getFileSize(filePath);
+
       		try {
-    			s3Client.putObject(new PutObjectRequest(bucketName, key, file));
-    			mongo.addNewFileDetails(existingUser, key, filePath, fileSize);
-    			 return Response.status(200).entity("File Added").build();
+    			S3TransferProgress uploader = new S3TransferProgress(Name, s3Client);
+    			//Thread.sleep(1000);
+    			Key = uploader.getfileName();
+    			 Long fileSize = uploader.getfileSize();
+    			 System.out.println("Hellllloooooooooo Key " + Key + "size" + fileSize);
+    			if (Key != null){
+    			mongo.addNewFileDetails(existingUser, Key, "C:\\FakePath", fileSize);
+    			 
+    			return Response.status(200).entity("File Added").build();
+    			}
+    			else{
+    			 return Response.status(200).entity("File Name is NULL").build();
+    			}
     		} catch (AmazonServiceException e) {
     			// TODO Auto-generated catch block
     			e.printStackTrace();
@@ -284,9 +242,7 @@ public class BucketResource {
     			// TODO Auto-generated catch block
     			e.printStackTrace();
     		} 
-      	}
-      	else
-      		System.out.println("No not found");
+
       	
     	
         System.out.println();
@@ -466,5 +422,7 @@ static List<PartETag> GetETags(List<CopyPartResult> responses)
             System.out.println();
             return Response.status(400).entity("File could not be deleted").build();
 	}
+    
+    
 }
 

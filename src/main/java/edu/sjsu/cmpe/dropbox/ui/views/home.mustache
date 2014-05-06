@@ -101,25 +101,7 @@
     </div><!--/.container-->
 	</div><!--/.container-data-->
    
-   
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Upload a file</h4>
-      </div>
-      <div class="modal-body">
-        <input type="file" name="filepath" id="link" >
-	  </div>
-      <div class="modal-footer">
-        <input id="upload" class="btn btn-lg btn-primary" type="submit" value="Upload" name="upload" >
-        
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
+  
  <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -198,7 +180,7 @@
              
              if(button_pressed=="download"){
              
-        	var uri = "/dropbox/v1/files/old/"+existinguser+"/download?filepath=D:/Downloadfiles/"+tag+"&fileName="+tag;
+        	var uri = "/dropbox/v1/files/old/"+existinguser+"/download?filepath=C:/temp/"+tag+"&fileName="+tag;
         	 alert("File Download In Progress!");
        		 $.ajax({
             	      url: uri,
@@ -209,7 +191,11 @@
                       error:function(xhr, statusText){
     						if (xhr.status == 200)
     						{
+    							alert("File downloaded at C:\\temp");
     				 			window.location = "/dropbox/home/"+existinguser+"/listoffiles";
+    						}
+    						else{
+    							alert("Error downloading");
     						}
     					}
                 });
@@ -255,19 +241,17 @@
               });
               </script>
               <script type="text/javascript">
-				$( "#upload" ).click(function() {
-					var f = document.getElementById('link').value;
-		
+				$("#uploadurl").click(function() {		
 					var pathArray=window.location.pathname.split('/');
 					var existinguser=pathArray[3];
-					var uri = "/dropbox/v1/files/old/"+existinguser+"/upload?filepath="+f;
+					var uri = "/dropbox/v1/files/old/"+existinguser+"/upload";
               	
 			       
        		 $.ajax({
             	     url: uri,
                 	  type: 'POST',
                   	  success: function(data) {
-                         window.location = "/dropbox/home/"+existinguser+"/listoffiles";
+                        window.location = "/dropbox/home/"+existinguser+"/listoffiles";
                       },
                       error:function(xhr, statusText){
                     
@@ -287,11 +271,6 @@
   <script type="text/javascript">
 	
 	$( window ).load(function() {
-	
-  		var pathArray=window.location.pathname.split('/');
-	var existinguser=pathArray[3];
-	var url = "/dropbox/home/"+existinguser+"/deletedfiles"
-	$("#deleteurl").attr("href", url );
 	
 	var pathArray=window.location.pathname.split('/');
 	var existinguser=pathArray[3];

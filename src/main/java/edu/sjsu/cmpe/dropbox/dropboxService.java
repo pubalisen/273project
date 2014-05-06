@@ -14,7 +14,6 @@ import edu.sjsu.cmpe.dropbox.config.MongoConfig;
 import edu.sjsu.cmpe.dropbox.config.dropboxServiceConfiguration;
 import edu.sjsu.cmpe.dropbox.domain.MongoDBDetails;
 import edu.sjsu.cmpe.dropbox.dto.MongoTest;
-import edu.sjsu.cmpe.dropbox.ui.resources.DeletedFileResource;
 import edu.sjsu.cmpe.dropbox.ui.resources.HomeResource;
 import edu.sjsu.cmpe.dropbox.ui.resources.LoginResource;
 import edu.sjsu.cmpe.dropbox.ui.resources.RegisterResource;
@@ -43,12 +42,12 @@ public class dropboxService extends Service<dropboxServiceConfiguration> {
 	/** Add new resources here */
 	
 	MongoConfig.setAmazonTimeZone(configuration.getAmazonTimeZone());
-//	MongoConfig.setAmazonUsername("XXXXXXXXXXXXXXXXXXXXXXXx");
-//	MongoConfig.setAmazonPassword("XXXXXXXXXXXXXXXXXXXXXXXX");
-//	MongoConfig.setDatabaseAddress("XXXXXXXXXXXX");
-//	MongoConfig.setDatabasePassword("XXXXXX");
-//	MongoConfig.setDatabasePort(XXXXX);
-	MongoConfig.setDatabaseUsername("cmpe273");
+	MongoConfig.setAmazonUsername("AKIAJGHI3W5AFQQM2VJQ");
+	MongoConfig.setAmazonPassword("yQ2HoE7+gdwrQBaOylN0wiQaEV4q4AUmGxRYJAO4");
+	MongoConfig.setDatabaseAddress("ds053658.mongolab.com");
+	MongoConfig.setDatabasePassword("_technical55");
+	MongoConfig.setDatabasePort(53658);
+	MongoConfig.setDatabaseUsername("pawans55");
 	MongoConfig.setDbCollection("dropboxdetails");
 	MongoConfig.setDbName("dropbox");
 	// Added root resource - kept nothing as of now.
@@ -60,8 +59,7 @@ public class dropboxService extends Service<dropboxServiceConfiguration> {
 		environment.addResource(new BucketResource(Mongo));
 	environment.addResource(new LoginResource());
 	environment.addResource(new HomeResource(Mongo,MongoDBDetails));
-	environment.addResource(new DeletedFileResource(Mongo));
-	environment.addResource(new SharedFileResource(Mongo));
+		environment.addResource(new SharedFileResource(Mongo));
 	environment.addResource(new RegisterResource());
     }
 }
