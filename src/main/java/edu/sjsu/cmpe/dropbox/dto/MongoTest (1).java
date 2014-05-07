@@ -59,7 +59,7 @@ public class MongoTest {
 		MongoTest.collection = jongo.getCollection(MongoConfig
 				.getDbCollection());
 		
-		System.out.println("Pooja 1 - "+ MongoTest.collection);
+		System.out.println("Testing - "+ MongoTest.collection);
 	}
 
 	/**
@@ -110,6 +110,7 @@ public class MongoTest {
 		String query = "{userName:'" + userName + "'}";
 		long storageLeft = MongoTest.collection.findOne(query)
 				.as(MongoDBDetails.class).getTotalStorageLeft();
+		System.out.println("storageLeft" + storageLeft);
 		if (storageLeft >= fileSize) {
 			return true;
 		} else {
@@ -283,6 +284,7 @@ public class MongoTest {
 		}
 		dbDetails.setPassword(password);
 		dbDetails.setEmailid(emailid);
+		dbDetails.setTotalStorageLeft(15);
 		insert(dbDetails);
 		System.out.println("Pooja 2 - " + dbDetails);
 		return dbDetails.getUserName();
