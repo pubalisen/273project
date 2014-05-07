@@ -124,15 +124,24 @@ public class S3TransferProgress {
             };
 
             File fileToUpload = fileChooser.getSelectedFile();
+            size = fileToUpload.length()/1048786;
+            fileName = fileToUpload.getName();
+            Boolean allow = mongo.checkFileSizeToUpload(bucketName,size);
+            System.out.println(allow);
+            System.out.println(size);
+            if(allow == true){
+            System.out.println("Mongo is" + mongo);
+            mongo.addNewFileDetails(bucketName, fileName, "C:\\FakePath", size);
+            
             PutObjectRequest request = new PutObjectRequest(
                     bucketName, fileToUpload.getName(), fileToUpload)
                 .withProgressListener(progressListener);
            upload = tx.upload(request);
             
-            size = fileToUpload.length()/1024;
+            /*size = fileToUpload.length()/1024;
             fileName = fileToUpload.getName();
             System.out.println("Mongo is" + mongo);
-            mongo.addNewFileDetails(bucketName, fileName, "C:\\FakePath", size);
+            mongo.addNewFileDetails(bucketName, fileName, "C:\\FakePath", size);*/
             setSize(size);
             System.out.print(size);
             setfileName(fileName);
@@ -141,6 +150,7 @@ public class S3TransferProgress {
 
         }
     }
+	}
 
     public void setSize(long size){
     	this.size =size;

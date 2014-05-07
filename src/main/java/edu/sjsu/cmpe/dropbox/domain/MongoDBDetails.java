@@ -127,26 +127,6 @@ public class MongoDBDetails {
 		this.bucketName = bucketName;
 	}
 
-	/**
-	 * @return the role
-	 */
-	public String getRole() {
-		return role;
-	}
-
-	/**
-	 * @param role
-	 *            the role to set
-	 */
-	public void setRole(String role) {
-		this.role = role;
-		if (role.equalsIgnoreCase("manager")) {
-			this.TotalStorage = 5120;
-			this.TotalStorageLeft = 5120;
-		} else {
-			this.TotalStorage = 1024;
-		}
-	}
 
 	/**
 	 * @return the totalStorage
