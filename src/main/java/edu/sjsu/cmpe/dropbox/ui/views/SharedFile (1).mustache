@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+  <meta http-equiv="refresh" content="15" /> 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -92,7 +93,7 @@
       <hr>
 
       <footer>
-        <p>Maverick &copy; Company 2013</p>
+        <p>Projections &copy; Company 2013</p>
       </footer>
 
     </div><!--/.container-->
@@ -170,6 +171,7 @@
     				{
     		            alert("File downloaded at C:\\temp");
     				 	window.location = "/dropbox/home/"+existinguser+"/sharedfiles";
+    				 	window.location.reload(true);
     				}
     				else
     					{
@@ -196,6 +198,7 @@
       	  type: 'POST',
         	  success: function(data) {
                window.location = "/dropbox/home/"+existinguser+"/listoffiles";
+               window.location.reload(true);
             },
             error:function(xhr, statusText){
           
