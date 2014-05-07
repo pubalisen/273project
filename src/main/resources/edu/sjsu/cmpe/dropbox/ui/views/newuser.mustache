@@ -1,51 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="ico/favicon.png">
-    
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+
+<title>Jumbotron Template for Bootstrap</title>
+
+<!-- Bootstrap core CSS -->
+
+<link href="./assets/css/offcanvas.css" rel="stylesheet">
+
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" media="screen">
 
 
-    <title>Signin Template for Bootstrap</title>
+<!-- Custom styles for this template -->
+<link href="./assets/css/jumbotron.css" rel="stylesheet">
 
-    <!-- Bootstrap core CSS -->
-    <link href="./assets/css/bootstrap.css" rel="stylesheet">
+<!-- Just for debugging purposes. Don't actually copy this line! -->
+<!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
 
-	
-    <!-- Custom styles for this template -->
-    <link href="./assets/css/signin.css" rel="stylesheet">
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+</head>
 
-    <!-- Just for debugging purposes. Don't actually copy this line! -->
-    <!--[if lt IE 9]><script src="./assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-  </head>
-
-  <body>
-
-
-    <div class="container" >
-   
+<body bgcolor="yellow">
+<div>
+  <h1 style="text-align:center">StoreBox!!</h1>
+</div>
 
       <form class="form-signin">
-		<h3 style="text-align:center"> Register to Maverick</h3>      
-
-	 			  <input type="text" class="form-control" placeholder="Email" name="emailid" id="email" >	
-	 
-	              <input type="text" class="form-control" placeholder="Username" name="username" id="uword" >
-    
-    	          <input type="password" class="form-control" placeholder="Password" name="password"  id="pword">
-                  	  
-          	   	  <input id="login" class="btn btn-lg btn-primary btn-block" type="submit" value="Sign up">
-    
+		<h3 style="text-align:left"> Register to Maverick</h3>      
+		<div class="form-group">
+	 			  <p>USER-EMAIL: <input type="text" class="input-large" placeholder="Email" name="emailid" id="email" size="74"></p>	
+	 </div>
+	 <div class="form-group">
+	 <p>USER-NAME: <input type="text" class="input-large" placeholder="Username" name="username" id="uword"  size="74"></p>
+    </div>
+    <div class="form-group">
+    <p>PASSWORD: <input type="password" class="input-large" placeholder="Password" name="password"  id="pword" size="75"><p>
+     </div>
+     <div class="form-group">
+          	   	  <input id="login"  type="submit" value="Sign up" class="btn btn-success"   style="margin-right: 30px">
+    </div>
       </form>
       
  
@@ -54,6 +57,10 @@
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     
        <script type="text/javascript">
+       
+       $(window).load(function() {
+    	   $('body').css('background', '#E6E6E6');
+    	 });
        
         
          $(document).ready(function(){
