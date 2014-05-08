@@ -251,6 +251,7 @@ public class MongoTest {
 	}
 
 	/**
+	 * Author: Pawan S
 	 * @param userName
 	 * @param fileName
 	 * @param filePath
@@ -288,5 +289,19 @@ public class MongoTest {
 		insert(dbDetails);
 		System.out.println("Pooja 2 - " + dbDetails);
 		return dbDetails.getUserName();
+	}
+	
+	public String getUserEmail(String userName){
+		MongoDBDetails dbDetails = new MongoDBDetails();
+		String query = "{userName:'"+userName+"'}";
+		String emailId = MongoTest.collection.findOne(query).as(MongoDBDetails.class).getEmailid();
+		return (emailId);
+	}
+	
+	public long getUserStorage(String userName){
+		MongoDBDetails dbDetails = new MongoDBDetails();
+		String query = "{userName:'"+userName+"'}";
+		long storage = MongoTest.collection.findOne(query).as(MongoDBDetails.class).getTotalStorageLeft();
+		return (storage);
 	}
 }

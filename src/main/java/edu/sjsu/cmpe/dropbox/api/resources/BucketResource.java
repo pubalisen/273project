@@ -24,6 +24,8 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.Bucket;
@@ -46,6 +48,15 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClient;
+import com.amazonaws.services.simpleemail.model.Body;
+import com.amazonaws.services.simpleemail.model.Content;
+import com.amazonaws.services.simpleemail.model.Destination;
+import com.amazonaws.services.simpleemail.model.ListVerifiedEmailAddressesResult;
+import com.amazonaws.services.simpleemail.model.Message;
+import com.amazonaws.services.simpleemail.model.SendEmailRequest;
+import com.amazonaws.services.simpleemail.model.VerifyEmailAddressRequest;
 //import com.amazonaws.regions.Regions;
 //import com.amazonaws.regions.Region;
 import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
@@ -204,8 +215,9 @@ public class BucketResource {
  
       	s3Client.setEndpoint("http://s3-us-west-1.amazonaws.com");
      
-     
+      	     
       	String bucketName = mongo.getBucketName(existingUser);
+      	
       	
       	String Name = existingUser;
     	System.out.print("Name is in resource.java is" + Name);
@@ -219,10 +231,15 @@ public class BucketResource {
       	//long fileSize = getFileSize(filePath);
 
       		try {
+      			long storageBefore = mongo.getUserStorage(existingUser);
+      			System.out.println("Storage before "+storageBefore);
     			S3TransferProgress uploader = new S3TransferProgress(Name, s3Client, mongo);
     			Key = uploader.getfileName();
     			 Long fileSize = uploader.getfileSize();
-    			
+    			 long storageAfter = mongo.getUserStorage(existingUser);
+    			 System.out.println("Storage After "+storageAfter);
+    		//	 if(storageBefore == storageAfter )
+    		//		 return Response.status(400).entity("File could not be added due to size restriction").build();
     			 System.out.println("Hellllloooooooooo Key " + Key + "size" + fileSize);
     			 return Response.status(200).entity("File Added").build();
     			 
@@ -328,9 +345,15 @@ static List<PartETag> GetETags(List<CopyPartResult> responses)
 	public Response shareFile(@PathParam("existinguser") String existingUser,
 			@QueryParam("filename") String fileName,
 			@QueryParam("sharewith") String sharewith) throws UnknownHostException {
+    	AmazonCredentials myCredentials = new AmazonCredentials();
+		AWSCredentials credentials = myCredentials.getCredentials();
 		if (mongo.isUserNameExist(sharewith)) {
 			mongo.shareFile(existingUser, sharewith, fileName);
 			copyFileFromBucket(existingUser, sharewith, fileName);
+			/*started changing here*/
+			String emailId = mongo.getUserEmail(sharewith);
+			sentEmail(credentials, existingUser, sharewith,emailId,fileName);
+			/*end my changes*/
 			return Response.status(200).build();
 		} else {
 			return Response
@@ -413,6 +436,69 @@ static List<PartETag> GetETags(List<CopyPartResult> responses)
             System.out.println();
             return Response.status(400).entity("File could not be deleted").build();
 	}
+    
+    public void sentEmail(AWSCredentials credentials,String UserName, String shareUser, String newUserEmailID, String filename){
+
+		String FROM = "cmpe273.maverick@gmail.com";
+	//	String FROM = "success@simulator.amazonses.com";
+		String TO = newUserEmailID;
+		String SUBJECT = "Welcome to CMPE273 Dropbox project";
+		String BODY = "Your friend : " + UserName+ " has shared a file : " +filename+" with you:\n";
+	
+	//	credentials.getAWSAccessKeyId();
+	//	credentials.getAWSSecretKey();
+		Destination destination = new Destination()
+				.withToAddresses(new String[] { TO });
+		Content subject = new Content().withData(SUBJECT);
+		Content textBody = new Content().withData(BODY);
+		Body body = new Body().withText(textBody);
+		Message message = new Message().withSubject(subject).withBody(body);
+		SendEmailRequest request = new SendEmailRequest().withSource(FROM)
+				.withDestination(destination).withMessage(message);
+	//	SendEmailRequest request = new SendEmailRequest(FROM, TO, message);
+		try {
+			System.out
+					.println("Attempting to send an email through AmazonSES...");
+			System.out.println(credentials);
+			System.out.println(request);
+			
+			
+			AmazonSimpleEmailServiceClient client = new AmazonSimpleEmailServiceClient(
+					credentials);
+			 Region REGION = Region.getRegion(Regions.US_EAST_1);
+	            client.setRegion(REGION);
+	            verifyEmailAddress(client, FROM);
+			client.sendEmail(request);
+			System.out.println("Email sent!");
+		} catch (Exception ex) {
+			System.out.println("The email was not sent.");
+			ex.printStackTrace();
+			System.out.println("Error message: " + ex.getMessage());
+		}
+		
+	   
+	}
+		
+/**
+ * Sends a request to Amazon Simple Email Service to verify the specified
+ * email address. This triggers a verification email, which will contain a
+ * link that you can click on to complete the verification process.
+ *
+ * @param ses
+ *            The Amazon Simple Email Service client to use when making
+ *            requests to Amazon SES.
+ * @param address
+ *            The email address to verify.
+ */
+private static void verifyEmailAddress(AmazonSimpleEmailService ses, String address) {
+    ListVerifiedEmailAddressesResult verifiedEmails = ses.listVerifiedEmailAddresses();
+    System.out.println("List of verified address " + verifiedEmails);
+    if (verifiedEmails.getVerifiedEmailAddresses().contains(address)) return;
+
+    ses.verifyEmailAddress(new VerifyEmailAddressRequest().withEmailAddress(address));
+    System.out.println("Please check the email address " + address + " to verify it");
+    System.exit(0);
+}
     
     
 }
