@@ -12,3 +12,12 @@ Service endpoint: http://localhost:8080/library/v1
 
 Admin: http://localhost:8081/
 
+Things We Learnt:
+Practical Applications of:
+1) RestFul Services
+2) Jquery 
+3) Ajax
+4) Amazon Web Services
+
+
+
